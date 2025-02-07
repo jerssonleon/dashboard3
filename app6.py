@@ -42,7 +42,7 @@ col1, col2 = st.columns(2)
 plotly_containers = {}
 
 # Seleccionar las primeras 6 variables para graficar
-variables_a_graficar = df.columns[1:7]  # Evitando la columna de tiempo
+variables_a_graficar = df.columns[0:5]  # Evitando la columna de tiempo
 for i, var in enumerate(variables_a_graficar):
     if i % 2 == 0:
         plotly_containers[var] = col1.empty()
