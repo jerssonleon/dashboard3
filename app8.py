@@ -13,7 +13,7 @@ st.title("Dashboard de Datos de Energía con Animación en Plotly")
 @st.cache_data
 def load_data():
     return pd.DataFrame({
-        "Tiempo": pd.date_range(start="2023-01-01", periods=7*24*6, freq="10T"),
+        "Tiempo": pd.date_range(start="2023-01-01", periods=7*24*6, freq="10min"),
         "Variable 1": range(7*24*6),
         "Variable 2": [x**1.5 for x in range(7*24*6)],
         "Variable 3": [x*2 for x in range(7*24*6)],
@@ -51,17 +51,17 @@ while True:
 
     df_window = df.iloc[start_idx:end_idx]
 
-    for var in df.columns[1:]:
+    for i, var in enumerate(df.columns[1:]):
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=df_window["Tiempo"], y=df_window[var], mode="lines", name=var))
         fig.update_layout(title=f"Evolución de {var}", xaxis_title="Tiempo", yaxis_title=var,
                           xaxis_range=[df_window["Tiempo"].min(), df_window["Tiempo"].max()])
 
-        # Actualizar el gráfico sin generar nuevos elementos
-        plotly_containers[var].plotly_chart(fig, use_container_width=True)
+        # Actualizar el gráfico sin generar nuevos elementos con una clave única
+        plotly_containers[var].plotly_chart(fig, use_container_width=True, key=f"plot_{var}_{i}")
 
     # Avanzar la ventana en intervalos de 10 minutos
-    st.session_state.index = min(st.session_state.index + 1, len(df))
+    st.session_state.index = min(st.session_state.index + 6, len(df))
 
     # Esperar 500ms antes de la siguiente actualización
     time.sleep(0.5)
