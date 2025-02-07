@@ -22,8 +22,17 @@ st.write("Columnas disponibles en el dataset:", df.columns)
 if 'Tiempo' not in df.columns:
     df.rename(columns={df.columns[0]: 'Tiempo'}, inplace=True)
 
-# Convertir la columna Tiempo a formato datetime
+# Mostrar los primeros valores de la columna 'Tiempo' antes de la conversión
+st.write("Primeros valores de la columna 'Tiempo' antes de conversión:", df['Tiempo'].head())
+
+# Asegurar que la columna 'Tiempo' sea tipo string antes de la conversión
+df['Tiempo'] = df['Tiempo'].astype(str)
+
+# Intentar conversión a datetime con un formato específico si se conoce
 df['Tiempo'] = pd.to_datetime(df['Tiempo'], errors='coerce')
+
+# Mostrar valores únicos de la columna 'Tiempo' después de la conversión
+st.write("Valores únicos en la columna 'Tiempo' después de conversión:", df['Tiempo'].unique()[:10])
 
 # Mostrar el DataFrame
 st.write("Vista previa de los datos:", df.head())
