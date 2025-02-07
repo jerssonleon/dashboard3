@@ -58,7 +58,7 @@ while True:
                           xaxis_range=[df_window["Tiempo"].min(), df_window["Tiempo"].max()])
 
         # Actualizar el gráfico sin generar nuevos elementos con una clave única
-        plotly_containers[var].plotly_chart(fig, use_container_width=True, key=f"plot_{var}_{j}")
+        plotly_containers[var].plotly_chart(fig, use_container_width=True, key=f"plot_{var}_{st.session_state.index}")
 
     # Avanzar la ventana en intervalos de 10 minutos
     st.session_state.index = min(st.session_state.index + 6, len(df))
