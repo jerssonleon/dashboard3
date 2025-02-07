@@ -18,21 +18,12 @@ df.columns = df.columns.str.strip()
 # Verificar nombres de columnas
 st.write("Columnas disponibles en el dataset:", df.columns)
 
-# Asegurar que la columna de tiempo exista y renombrarla si es necesario
-if 'Tiempo' not in df.columns:
-    df.rename(columns={df.columns[0]: 'Tiempo'}, inplace=True)
-
-# Mostrar los primeros valores de la columna 'Tiempo' antes de la conversión
-st.write("Primeros valores de la columna 'Tiempo' antes de conversión:", df['Tiempo'].head())
-
-# Asegurar que la columna 'Tiempo' sea tipo string antes de la conversión
-df['Tiempo'] = df['Tiempo'].astype(str)
-
-# Intentar conversión a datetime con un formato específico si se conoce
-df['Tiempo'] = pd.to_datetime(df['Tiempo'], errors='coerce')
-
-# Mostrar valores únicos de la columna 'Tiempo' después de la conversión
-st.write("Valores únicos en la columna 'Tiempo' después de conversión:", df['Tiempo'].unique()[:10])
+# Crear una nueva columna 'Tiempo' a partir de Year, Month, Day, Hour, Minute
+if {'Year', 'Month', 'Day', 'Hour', 'Minute'}.issubset(df.columns):
+    df['Tiempo'] = pd.to_datetime(df[['Year', 'Month', 'Day', 'Hour', 'Minute']])
+    st.write("Nueva columna 'Tiempo' creada exitosamente.")
+else:
+    st.write("Advertencia: No se encontraron todas las columnas necesarias para crear 'Tiempo'.")
 
 # Mostrar el DataFrame
 st.write("Vista previa de los datos:", df.head())
