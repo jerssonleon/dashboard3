@@ -12,6 +12,19 @@ st.title("Dashboard de Datos de Energía con Animación en Plotly")
 # Cargar datos reales
 df = pd.read_csv('dataset_limpio_carga_laboral.csv')
 
+# Eliminar espacios en los nombres de las columnas
+df.columns = df.columns.str.strip()
+
+# Verificar nombres de columnas
+st.write("Columnas disponibles en el dataset:", df.columns)
+
+# Asegurar que la columna de tiempo exista y renombrarla si es necesario
+if 'Tiempo' not in df.columns:
+    df.rename(columns={df.columns[0]: 'Tiempo'}, inplace=True)
+
+# Convertir la columna Tiempo a formato datetime
+df['Tiempo'] = pd.to_datetime(df['Tiempo'], errors='coerce')
+
 # Mostrar el DataFrame
 st.write("Vista previa de los datos:", df.head())
 
@@ -28,9 +41,8 @@ col1, col2 = st.columns(2)
 # Diccionario para los gráficos dinámicos
 plotly_containers = {}
 
-# Crear espacios para los gráficos
-df.columns = df.columns.str.strip()  # Eliminar espacios en los nombres de las columnas
-variables_a_graficar = df.columns[1:7]  # Seleccionar las primeras 6 variables
+# Seleccionar las primeras 6 variables para graficar
+variables_a_graficar = df.columns[1:7]  # Evitando la columna de tiempo
 for i, var in enumerate(variables_a_graficar):
     if i % 2 == 0:
         plotly_containers[var] = col1.empty()
