@@ -56,14 +56,14 @@ while True:
 
     df_window = df.iloc[start_idx:end_idx]
 
-    for var in variables_a_graficar:
+    for i, var in enumerate(variables_a_graficar):
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=df_window["Tiempo"], y=df_window[var], mode="lines", name=var))
         fig.update_layout(title=f"Evolución de {var}", xaxis_title="Tiempo", yaxis_title=var,
                           xaxis_range=[df_window["Tiempo"].min(), df_window["Tiempo"].max()])
 
-        # Actualizar el gráfico sin generar nuevos elementos
-        plotly_containers[var].plotly_chart(fig, use_container_width=True)
+        # Actualizar el gráfico sin generar nuevos elementos con una clave única
+        plotly_containers[var].plotly_chart(fig, use_container_width=True, key=f"plot_{i}")
 
     # Avanzar la ventana
     st.session_state.index = min(st.session_state.index + 1, len(df))
